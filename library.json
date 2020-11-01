@@ -1,6 +1,6 @@
 {
     "name": "esp8266lib",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "some helpful stuff for ESP-8266",
     "keywords": "esp8266",
     "repository":
@@ -20,6 +20,6 @@
     "dependencies": {
     },
     "frameworks": "arduino",
-    "platforms": " espressif8266"
+    "platforms": "espressif8266"
   }
   
