@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Network.h"
 #include <Arduino.h>
 #include <WiFiUdp.h>
-#include "Settings.h"
+#include "LoggerSettings.h"
 
 #define LOG_NOTICE "13"
 #define LOG_INFO "14"
@@ -10,11 +11,11 @@
 class Logger
 {
 public:
-  Logger(Settings * settings);
+  Logger(LoggerSettings * settings);
   void writeLog(String severity, String message);
   void setup();
 
 private:
-  Settings *_settings;
+  LoggerSettings *_settings;
   WiFiUDP _UDP;
 };

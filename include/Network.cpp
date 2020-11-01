@@ -3,7 +3,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 
-Network::Network(Settings *settings)
+Network::Network(NetworkSettings *settings)
 {
   _settings = settings;
 }
@@ -12,13 +12,13 @@ void Network::setup()
 {
   if (!_settings->otherAPSSID || _settings->otherAPSSID == "" || !connectToWifi())
     startAP();
-//  else
-//  {
-//    if (!MDNS.begin(_settings->hostName.c_str(), WiFi.localIP()))
-//      Serial.println("Error setting up mDNS responder for device name '" + _settings->hostName + "'!");
-//    else
-//      Serial.println("mDNS responder for device name " + _settings->hostName + ".local started.");
-//  }
+  else
+  {
+    if (!MDNS.begin(_settings->hostName.c_str(), WiFi.localIP()))
+      Serial.println("Error setting up mDNS responder for device name '" + _settings->hostName + "'!");
+    else
+      Serial.println("mDNS responder for device name " + _settings->hostName + ".local started.");
+  }
 }
 
 bool Network::connectToWifi()
@@ -32,11 +32,13 @@ bool Network::connectToWifi()
   for (int i = 0; i < 60; i++)
   {
     Serial.print(".");
-    if (WiFi.status() == WL_CONNECTED)
+    if (WiFi.isConnected())
     {
       Serial.println("");
       Serial.print("connected, IP Address: ");
       Serial.println(WiFi.localIP());
+      wasConnected = true;
+      reconnectCount = 0;
       return true;
     }
     delay(1000);
@@ -61,3 +63,25 @@ void Network::startAP()
   Serial.print("IP Address: ");
   Serial.println(WiFi.softAPIP());
 }
+
+void Network::loop()
+{
+  if (wasConnected && !WiFi.isConnected())
+  {
+    Serial.println("lost connection to WIFI!");
+    if (!connectToWifi())
+    {
+      reconnectCount++;
+      Serial.print("failed for ");
+      Serial.print(reconnectCount);
+      Serial.println(" times!");
+
+      if (reconnectCount >= 10)
+      {
+        Serial.println("falling back to AP mode.");
+        startAP();
+      }
+    }
+  }
+}
+

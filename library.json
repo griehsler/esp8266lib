@@ -1,0 +1,25 @@
+{
+    "name": "esp8266lib",
+    "version": "1.0.0",
+    "description": "some helpful stuff for ESP-8266",
+    "keywords": "esp8266",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/griehsler/esp8266lib.git"
+    },
+    "authors":
+    [
+      {
+        "name": "Ronald Griehsler",
+        "email": "ronald.griehsler@gmail.com",
+        "maintainer": true
+      }
+    ],
+    "license": "MIT",
+    "dependencies": {
+    },
+    "frameworks": "arduino",
+    "platforms": " espressif8266"
+  }
+  

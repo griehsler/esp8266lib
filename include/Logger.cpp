@@ -1,6 +1,6 @@
 #include "Logger.h"
 
-Logger::Logger(Settings *settings)
+Logger::Logger(LoggerSettings *settings)
 {
     _settings = settings;
 }
