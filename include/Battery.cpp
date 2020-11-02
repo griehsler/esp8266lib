@@ -13,7 +13,7 @@ void Battery::setup()
 
 float Battery::measure()
 {
-  int analogValue = analogRead(PIN_A0) - minAnalog;
+  int analogValue = analogRead(_analogPin) - minAnalog;
   analogValue = min(maxAnalog, max(minAnalog, analogValue));
   float percentage = ((float)analogValue / (maxAnalog - minAnalog)) * 100;
   return percentage;
