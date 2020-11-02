@@ -5,10 +5,13 @@ Logger::Logger(LoggerSettings *settings)
     _settings = settings;
 }
 
-void Logger::setup()
+void Logger::setup(String identity)
 {
     if (_settings->syslogEnabled)
+    {
         _UDP.begin(2390);
+        _identity = identity;
+    }
 }
 
 void Logger::writeLog(String severity, String message)
@@ -20,7 +23,7 @@ void Logger::writeLog(String severity, String message)
     _UDP.write("<");
     _UDP.write(severity.c_str());
     _UDP.write(">");
-    _UDP.write(_settings->hostName.c_str());
+    _UDP.write(_identity.c_str());
     _UDP.write(" lightswitch[]: ");
     _UDP.write(message.c_str());
     _UDP.endPacket();
