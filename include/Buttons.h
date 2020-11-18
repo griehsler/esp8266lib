@@ -19,18 +19,22 @@ public:
     void loop();
 
 private:
-    struct GPIOHandler
+    class GPIOHandler
     {
     public:
-        uint8_t pin;
-        ButtonMode mode;
-        BUTTON_CHANGED_CALLBACK callback;
-        bool lastReportedPressed = false;
-        unsigned long lastDebounceTime = 0;
+        GPIOHandler(uint8_t pin, ButtonMode mode, BUTTON_CHANGED_CALLBACK callback);
+        void setup();
+        void loop();
+
+    private:
+        uint8_t _pin;
+        ButtonMode _mode;
+        BUTTON_CHANGED_CALLBACK _callback;
+        bool _previouslyPressed;
+        bool _lastReportedPressed;
+        unsigned long _lastDebounceTime;
+        unsigned long debounceDelay = 50;
     };
 
-    unsigned long debounceDelay = 50;
-    std::vector<GPIOHandler> handlers;
-
-    void checkButton(GPIOHandler handler);
+    std::vector<GPIOHandler *> handlers;
 };
