@@ -5,7 +5,16 @@
 
 Network::Network(NetworkSettings *settings)
 {
+  NetworkStatusMonitor *defaultMonitor = new NetworkStatusMonitor();
+
   _settings = settings;
+  _statusMonitor = defaultMonitor;
+}
+
+Network::Network(NetworkSettings *settings, NetworkStatusMonitor *monitor)
+{
+  _settings = settings;
+  _statusMonitor = monitor;
 }
 
 void Network::setup()
@@ -25,11 +34,13 @@ bool Network::connectToWifi()
 {
   Serial.print("trying to connect to '" + _settings->otherAPSSID + "' ");
 
+  _statusMonitor->StartConnectingToOtherAp();
+
   WiFi.mode(WIFI_STA);
   WiFi.hostname(_settings->hostName);
   WiFi.begin(_settings->otherAPSSID.c_str(), _settings->otherAPPassword.c_str());
 
-  for (int i = 0; i < 60; i++)
+  for (int i = 0; i < 120; i++)
   {
     Serial.print(".");
     if (WiFi.isConnected())
@@ -39,13 +50,16 @@ bool Network::connectToWifi()
       Serial.println(WiFi.localIP());
       wasConnected = true;
       reconnectCount = 0;
+      _statusMonitor->StopConnectingToOtherAp(true);
       return true;
     }
-    delay(1000);
+    _statusMonitor->ProgressConnectingToOtherAp();
+    delay(500);
   }
 
   Serial.println("");
   Serial.println("timed out.");
+  _statusMonitor->StopConnectingToOtherAp(false);
   return false;
 }
 
@@ -62,6 +76,8 @@ void Network::startAP()
   Serial.println("started WIFI AP '" + ssid + "'");
   Serial.print("IP Address: ");
   Serial.println(WiFi.softAPIP());
+
+  _statusMonitor->StartedOwnAp();
 }
 
 void Network::loop()
@@ -84,4 +100,3 @@ void Network::loop()
     }
   }
 }
-

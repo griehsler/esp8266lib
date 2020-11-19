@@ -18,7 +18,7 @@ void Buttons::setup()
 void Buttons::loop()
 {
     for (auto handler : handlers)
-    handler->loop();
+        handler->loop();
 }
 
 void Buttons::GPIOHandler::setup()
