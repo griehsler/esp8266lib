@@ -1,20 +1,30 @@
 #include <Arduino.h>
 #include "Battery.h"
 
-Battery::Battery(int analogPin)
+Battery::Battery(uint8_t analogPin)
 {
-    _analogPin = analogPin;
+  _analogPin = analogPin;
 }
 
 void Battery::setup()
 {
-    pinMode(_analogPin, INPUT);
+  pinMode(_analogPin, INPUT);
+}
+
+int Battery::measureRaw()
+{
+  return analogRead(_analogPin);
+}
+
+float Battery::normalize(int rawValue)
+{
+  int analogValue = rawValue - minAnalog;
+  analogValue = min(maxAnalog, max(minAnalog, analogValue));
+  float percentage = ((float)analogValue / (maxAnalog - minAnalog)) * 100;
+  return percentage;
 }
 
 float Battery::measure()
 {
-  int analogValue = analogRead(_analogPin) - minAnalog;
-  analogValue = min(maxAnalog, max(minAnalog, analogValue));
-  float percentage = ((float)analogValue / (maxAnalog - minAnalog)) * 100;
-  return percentage;
+  return normalize(measureRaw());
 }

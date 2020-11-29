@@ -3,13 +3,16 @@
 class Battery
 {
 public:
-    int minAnalog = 680;
-    int maxAnalog = 940;
+    const int minAnalog = 680;
+    const int maxAnalog = 940;
 
-    Battery(int analogPin);
+    Battery(uint8_t analogPin);
     void setup();
     float measure();
 
+    int measureRaw();
+    float normalize(int rawValue);
+
 private:
-    int _analogPin;
+    uint8_t _analogPin;
 };
