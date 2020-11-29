@@ -18,8 +18,8 @@ int Battery::measureRaw()
 
 float Battery::normalize(int rawValue)
 {
-  int analogValue = rawValue - minAnalog;
-  analogValue = min(maxAnalog, max(minAnalog, analogValue));
+  int analogValue = min(maxAnalog, max(minAnalog, rawValue));
+  analogValue = maxAnalog - analogValue;
   float percentage = ((float)analogValue / (maxAnalog - minAnalog)) * 100;
   return percentage;
 }
