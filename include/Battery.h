@@ -3,7 +3,7 @@
 class Battery
 {
 public:
-    const int minAnalog = 680;
+    const int minAnalog = 780;
     const int maxAnalog = 940;
 
     Battery(uint8_t analogPin);
