@@ -26,4 +26,5 @@ private:
   int reconnectCount = 0;
   bool connectToWifi();
   void startAP();
+  bool tryConnect(int timeoutMs, int delayMs);
 };
