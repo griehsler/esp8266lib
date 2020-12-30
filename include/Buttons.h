@@ -15,7 +15,7 @@ class Buttons
 {
 public:
     void registerButton(uint8_t pin, ButtonMode mode, BUTTON_CHANGED_CALLBACK callback);
-    void setup();
+    void setup(unsigned long debounceDelay = 50);
     void loop();
 
 private:
@@ -23,7 +23,7 @@ private:
     {
     public:
         GPIOHandler(uint8_t pin, ButtonMode mode, BUTTON_CHANGED_CALLBACK callback);
-        void setup();
+        void setup(unsigned long debounceDelay);
         void loop();
 
     private:
@@ -33,7 +33,7 @@ private:
         bool _previouslyPressed;
         bool _lastReportedPressed;
         unsigned long _lastDebounceTime;
-        unsigned long debounceDelay = 50;
+        unsigned long _debounceDelay = 50;
     };
 
     std::vector<GPIOHandler *> handlers;

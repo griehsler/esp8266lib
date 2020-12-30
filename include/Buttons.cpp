@@ -7,11 +7,11 @@ void Buttons::registerButton(uint8_t pin, ButtonMode mode, BUTTON_CHANGED_CALLBA
     handlers.push_back(handler);
 }
 
-void Buttons::setup()
+void Buttons::setup(unsigned long debounceDelay)
 {
     for (auto handler : handlers)
     {
-        handler->setup();
+        handler->setup(debounceDelay);
     }
 }
 
@@ -21,7 +21,7 @@ void Buttons::loop()
         handler->loop();
 }
 
-void Buttons::GPIOHandler::setup()
+void Buttons::GPIOHandler::setup(unsigned long debounceDelay)
 {
     uint8_t mode;
     if (_mode == ButtonMode::WaitForHigh)
@@ -32,6 +32,8 @@ void Buttons::GPIOHandler::setup()
     Serial.print("setting up button on pin ");
     Serial.println(_pin);
     pinMode(_pin, mode);
+
+    _debounceDelay = debounceDelay;
 }
 
 void Buttons::GPIOHandler::loop()
@@ -45,9 +47,8 @@ void Buttons::GPIOHandler::loop()
         _lastDebounceTime = millis();
     }
 
-    if ((millis() - _lastDebounceTime) > debounceDelay)
+    if ((millis() - _lastDebounceTime) >= _debounceDelay)
     {
-        // Serial.println("reached debounce limit");
         if (newIsPressed != _lastReportedPressed)
         {
             Serial.print("reporting new state: ");
@@ -56,15 +57,6 @@ void Buttons::GPIOHandler::loop()
             _lastReportedPressed = newIsPressed;
         }
     }
-
-    // Serial.print("Status: newIsPressed=");
-    // Serial.print(newIsPressed);
-    // Serial.print(", previouslyPressed=");
-    // Serial.print(_previouslyPressed);
-    // Serial.print(", lastDebounceTime=");
-    // Serial.print(_lastDebounceTime);
-    // Serial.print(", lastReportedPressed=");
-    // Serial.println(_lastReportedPressed);
 
     _previouslyPressed = newIsPressed;
 }
