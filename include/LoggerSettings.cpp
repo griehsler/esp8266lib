@@ -1,13 +1,13 @@
 #include "LoggerSettings.h"
 
-void LoggerSettings::readFromJson(StaticJsonDocument<1024> document)
+void LoggerSettings::readFromJson(const JsonDocument &document)
 {
     syslogEnabled = document["syslogEnabled"].as<bool>();
     syslogServer = document["syslogServer"].as<String>();
     syslogServerPort = document["syslogServerPort"].as<int>();
 }
 
-void LoggerSettings::writeToJson(StaticJsonDocument<1024> document)
+void LoggerSettings::writeToJson(JsonDocument &document)
 {
     document["syslogEnabled"] = syslogEnabled;
     document["syslogServer"] = syslogServer;

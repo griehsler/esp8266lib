@@ -8,7 +8,7 @@ public:
     String otherAPSSID;
     String otherAPPassword;
     String hostName;
-    
+
     String staticIP;
     String gateway;
     String subnet;
@@ -16,6 +16,6 @@ public:
     String dns2;
 
 protected:
-    void readFromJson(StaticJsonDocument<512> document);
-    void writeToJson(StaticJsonDocument<512> document);
+    void readFromJson(const JsonDocument &document);
+    void writeToJson(JsonDocument &document);
 };

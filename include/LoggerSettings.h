@@ -10,6 +10,6 @@ public:
     int syslogServerPort = 514;
 
 protected:
-    void readFromJson(StaticJsonDocument<1024> document);
-    void writeToJson(StaticJsonDocument<1024> document);
+    void readFromJson(const JsonDocument &document);
+    void writeToJson(JsonDocument &document);
 };

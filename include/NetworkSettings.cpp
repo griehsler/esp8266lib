@@ -1,6 +1,6 @@
 #include "NetworkSettings.h"
 
-void NetworkSettings::readFromJson(StaticJsonDocument<512> document)
+void NetworkSettings::readFromJson(const JsonDocument &document)
 {
     hostName = document["hostname"].as<String>();
     otherAPSSID = document["ssid"].as<String>();
@@ -13,7 +13,7 @@ void NetworkSettings::readFromJson(StaticJsonDocument<512> document)
     dns2 = document["dns2"].as<String>();
 }
 
-void NetworkSettings::writeToJson(StaticJsonDocument<512> document)
+void NetworkSettings::writeToJson(JsonDocument &document)
 {
     document["hostname"] = hostName;
     document["ssid"] = otherAPSSID;
